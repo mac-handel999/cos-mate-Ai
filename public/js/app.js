@@ -1,11 +1,22 @@
 // COS MATE Frontend Application
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 // Supabase client initialization
-const SUPABASE_URL = 'https://ajykecaftevlxfgfeqhe.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_BJ9OnwX15ZXUzSoTj163Gg_-k7QhFCE';
+(function() {
+    const SUPABASE_URL = 'https://ajykecaftevlxfgfeqhe.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_BJ9OnwX15ZXUzSoTj163Gg_-k7QhFCE';
 
-export const supabaseClient = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    // Load Supabase library dynamically
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    script.onload = function() {
+        const supabase = window.supabase;
+        if (supabase) {
+            window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+            console.log('Supabase client initialized');
+        }
+    };
+    document.head.appendChild(script);
+})();
 
 class COSMateApp {
     constructor() {
@@ -24,7 +35,6 @@ class COSMateApp {
         if (startBtn) {
             startBtn.addEventListener('click', () => {
                 this.showNotification('Opening chat...', 'info');
-                // TODO: Open chat interface
             });
         }
 
@@ -48,7 +58,6 @@ class COSMateApp {
                 e.preventDefault();
                 const platform = btn.classList.contains('btn-whatsapp') ? 'WhatsApp' : 'Telegram';
                 this.showNotification(`Connecting to ${platform}...`, 'info');
-                // TODO: Connect to platform
             });
         });
     }
@@ -69,8 +78,26 @@ class COSMateApp {
     }
 
     async checkSupabaseConnection() {
+        // Wait for Supabase to load
+        const checkInterval = setInterval(() => {
+            if (window.supabaseClient) {
+                clearInterval(checkInterval);
+                this.testSupabaseConnection();
+            }
+        }, 500);
+
+        // Timeout after 5 seconds
+        setTimeout(() => {
+            clearInterval(checkInterval);
+            if (!window.supabaseClient) {
+                console.error('Supabase client failed to load');
+            }
+        }, 5000);
+    }
+
+    async testSupabaseConnection() {
         try {
-            const { data, error } = await supabaseClient.from('universities').select('count').limit(1);
+            const { data, error } = await window.supabaseClient.from('universities').select('count').limit(1);
             if (error) {
                 console.error('Supabase connection error:', error);
                 this.showNotification('Database connection issue', 'warning');
@@ -83,7 +110,6 @@ class COSMateApp {
     }
 
     showNotification(message, type = 'info') {
-        // Simple notification system
         const notification = document.createElement('div');
         notification.style.cssText = `
             position: fixed;
