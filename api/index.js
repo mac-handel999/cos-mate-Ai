@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import telegramRoutes from '../src/services/telegram/telegram.routes.js';
 
 dotenv.config();
 
@@ -28,6 +29,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Telegram webhook
+app.use('/api/telegram', telegramRoutes);
+
 // Root endpoint - serve landing page
 app.get('/', (req, res) => {
   res.sendFile(join(__dirname, '..', 'public', 'index.html'));
@@ -49,6 +53,7 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`COS MATE server running on port ${PORT}`);
     console.log(`Health check: http://localhost:${PORT}/api/health`);
+    console.log(`Telegram webhook: http://localhost:${PORT}/api/telegram/webhook`);
     console.log(`Landing page: http://localhost:${PORT}`);
   });
 }

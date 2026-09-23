@@ -27,7 +27,7 @@ export const config = {
     accessToken: process.env.WHATSAPP_ACCESS_TOKEN,
     phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID,
     verifyToken: process.env.WHATSAPP_VERIFY_TOKEN,
-    businessId: process.env.WHATSAPP Business_ID,
+    businessId: process.env.WHATSAPP_BUSINESS_ID,
   },
 
   // Telegram
@@ -35,6 +35,23 @@ export const config = {
     botToken: process.env.TELEGRAM_BOT_TOKEN,
     webhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET,
   },
+};
+
+// Validate required environment variables
+const requiredEnv = [
+  "TELEGRAM_BOT_TOKEN",
+  "TELEGRAM_WEBHOOK_SECRET"
+];
+
+for (const key of requiredEnv) {
+  if (!process.env[key]) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+}
+
+export const env = {
+  telegramBotToken: process.env.TELEGRAM_BOT_TOKEN,
+  telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET,
 };
 
 export default config;
