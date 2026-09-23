@@ -1,43 +1,5 @@
-import dotenv from 'dotenv';
+import "dotenv/config";
 
-dotenv.config();
-
-export const config = {
-  // Server
-  port: process.env.PORT || 3000,
-  nodeEnv: process.env.NODE_ENV || 'development',
-
-  // Supabase
-  supabase: {
-    url: process.env.SUPABASE_URL,
-    publishableKey: process.env.SUPABASE_PUBLISHABLE_KEY,
-    serviceKey: process.env.SUPABASE_SERVICE_KEY,
-  },
-
-  // AI (Groq)
-  groq: {
-    apiKey: process.env.GROQ_API_KEY,
-    model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
-    temperature: parseFloat(process.env.GROQ_TEMPERATURE) || 0.7,
-    maxTokens: parseInt(process.env.GROQ_MAX_TOKENS) || 2000,
-  },
-
-  // WhatsApp
-  whatsapp: {
-    accessToken: process.env.WHATSAPP_ACCESS_TOKEN,
-    phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID,
-    verifyToken: process.env.WHATSAPP_VERIFY_TOKEN,
-    businessId: process.env.WHATSAPP_BUSINESS_ID,
-  },
-
-  // Telegram
-  telegram: {
-    botToken: process.env.TELEGRAM_BOT_TOKEN,
-    webhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET,
-  },
-};
-
-// Validate required environment variables
 const requiredEnv = [
   "TELEGRAM_BOT_TOKEN",
   "TELEGRAM_WEBHOOK_SECRET",
@@ -55,5 +17,3 @@ export const env = {
   telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET,
   groqApiKey: process.env.GROQ_API_KEY
 };
-
-export default config;
