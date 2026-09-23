@@ -1,4 +1,12 @@
 // COS MATE Frontend Application
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+// Supabase client initialization
+const SUPABASE_URL = 'https://ajykecaftevlxfgfeqhe.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_BJ9OnwX15ZXUzSoTj163Gg_-k7QhFCE';
+
+export const supabaseClient = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
 class COSMateApp {
     constructor() {
         this.init();
@@ -7,6 +15,7 @@ class COSMateApp {
     init() {
         this.setupEventListeners();
         this.checkHealth();
+        this.checkSupabaseConnection();
     }
 
     setupEventListeners() {
@@ -56,6 +65,20 @@ class COSMateApp {
         } catch (error) {
             console.error('Health check failed:', error);
             this.showNotification('Connection issue - some features may be unavailable', 'warning');
+        }
+    }
+
+    async checkSupabaseConnection() {
+        try {
+            const { data, error } = await supabaseClient.from('universities').select('count').limit(1);
+            if (error) {
+                console.error('Supabase connection error:', error);
+                this.showNotification('Database connection issue', 'warning');
+            } else {
+                console.log('Supabase connected successfully');
+            }
+        } catch (error) {
+            console.error('Supabase connection failed:', error);
         }
     }
 
