@@ -17,9 +17,9 @@ export const config = {
   // AI (Groq)
   groq: {
     apiKey: process.env.GROQ_API_KEY,
-    model: process.env.GROQ_MODEL || 'llama-3.1-8b-instant',
+    model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
     temperature: parseFloat(process.env.GROQ_TEMPERATURE) || 0.7,
-    maxTokens: parseInt(process.env.GROQ_MAX_TOKENS) || 1000,
+    maxTokens: parseInt(process.env.GROQ_MAX_TOKENS) || 2000,
   },
 
   // WhatsApp
@@ -40,7 +40,8 @@ export const config = {
 // Validate required environment variables
 const requiredEnv = [
   "TELEGRAM_BOT_TOKEN",
-  "TELEGRAM_WEBHOOK_SECRET"
+  "TELEGRAM_WEBHOOK_SECRET",
+  "GROQ_API_KEY"
 ];
 
 for (const key of requiredEnv) {
@@ -52,6 +53,7 @@ for (const key of requiredEnv) {
 export const env = {
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN,
   telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET,
+  groqApiKey: process.env.GROQ_API_KEY
 };
 
 export default config;

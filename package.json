@@ -19,10 +19,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2",
+    "@supabase/supabase-js": "^2.44.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "@supabase/supabase-js": "^2.44.0"
+    "express": "^4.19.2",
+    "groq-sdk": "^1.6.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
