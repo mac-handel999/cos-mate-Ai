@@ -1,108 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COS MATE - AI Study Companion</title>
+    <meta name="description"
+        content="COS MATE is an AI-powered study companion built to help Nigerian university students study smarter, understand difficult topics, summarize study materials, and prepare for CBT exams.">
+    <meta name="theme-color" content="#16803c">
+    <title>COS MATE — Study Smarter. Learn Better.</title> <!-- Favicon -->
     <link rel="icon" type="image/png" href="Images/Cos-mate-logo.png">
-    <link rel="apple-touch-icon" href="Images/Cos-mate-logo.png">
+    <link rel="apple-touch-icon" href="Images/Cos-mate-logo.png"> <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div class="landing-page">
-        <nav class="nav">
-            <a href="/" class="logo-link">
-                <img src="Images/Cos-mate-logo.png" alt="COS MATE Logo" class="logo-image">
-                <span class="logo-text">COS MATE</span>
-            </a>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#how">How It Works</a>
-                <a href="#contact">Contact</a>
-            </div>
-        </nav>
-
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Study Smarter. Learn Better.</h1>
-                <p class="subtitle">Your AI-powered study companion for Nigerian university students</p>
-                <div class="cta-buttons">
-                    <button class="btn btn-primary" id="startStudying">Start Studying</button>
-                    <a href="#how" class="btn btn-secondary">Learn More</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="features" class="features">
-            <div class="container">
-                <h2>Why COS MATE?</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">💬</div>
-                        <h3>AI Chat</h3>
-                        <p>Ask questions and get instant, clear explanations from our AI tutor</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📚</div>
-                        <h3>Document Analysis</h3>
-                        <p>Upload PDFs and get summaries, key points, and practice questions</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🎯</div>
-                        <h3>CBT Preparation</h3>
-                        <p>Generate practice questions and quizzes from your course materials</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📱</div>
-                        <h3>Multi-Platform</h3>
-                        <p>Access COS MATE via WhatsApp, Telegram, or web browser</p>
+        <!-- ===================================================== NAVIGATION ===================================================== -->
+        <header>
+            <nav class="nav" aria-label="Main navigation"> <a href="/" class="logo-link" aria-label="COS MATE Home">
+                    <img src="Images/Cos-mate-logo.png" alt="COS MATE Logo" class="logo-image"> <span class="logo-text">
+                        COS MATE </span> </a>
+                <div class="nav-links"> <a href="#features"> Features </a> <a href="#how"> How It Works </a> <a
+                        href="#contact"> Get Started </a> </div>
+            </nav>
+        </header>
+        <!-- ===================================================== HERO ===================================================== -->
+        <main>
+            <section class="hero" id="home" aria-labelledby="hero-title">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 id="hero-title"> Study Smarter. <span>Learn Better.</span> </h1>
+                        <p class="subtitle"> Your AI-powered study companion built to help Nigerian university students
+                            understand more, study effectively, and prepare with confidence. </p>
+                        <div class="cta-buttons"> <a href="#contact" class="btn btn-primary" id="startStudying"> Start
+                                Studying </a> <a href="#how" class="btn btn-secondary"> See How It Works </a> </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section id="how" class="how-it-works">
-            <div class="container">
-                <h2>How It Works</h2>
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <h3>Connect</h3>
-                        <p>Use WhatsApp, Telegram, or your browser to reach COS MATE</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <h3>Ask</h3>
-                        <p>Send your question or upload your study materials</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <h3>Learn</h3>
-                        <p>Get AI-powered explanations, summaries, and practice questions</p>
+            </section>
+            <!-- ===================================================== FEATURES ===================================================== -->
+            <section id="features" class="features" aria-labelledby="features-title">
+                <div class="container">
+                    <h2 id="features-title"> Everything You Need to Study Smarter </h2>
+                    <div class="features-grid"> <!-- AI Chat -->
+                        <article class="feature-card">
+                            <div class="feature-icon" aria-hidden="true"> 💬 </div>
+                            <h3> AI Study Chat </h3>
+                            <p> Ask questions about your courses and get clear, easy-to-understand explanations whenever
+                                you need them. </p>
+                        </article> <!-- Documents -->
+                        <article class="feature-card">
+                            <div class="feature-icon" aria-hidden="true"> 📚 </div>
+                            <h3> Study Your Materials </h3>
+                            <p> Upload PDFs, notes, and study materials and let COS MATE help you summarize, explain,
+                                and understand them. </p>
+                        </article> <!-- CBT -->
+                        <article class="feature-card">
+                            <div class="feature-icon" aria-hidden="true"> 🎯 </div>
+                            <h3> CBT Preparation </h3>
+                            <p> Turn your course materials into objective practice questions and quizzes designed to
+                                help you prepare for CBT exams. </p>
+                        </article> <!-- Multi Platform -->
+                        <article class="feature-card">
+                            <div class="feature-icon" aria-hidden="true"> 📱 </div>
+                            <h3> Study Anywhere </h3>
+                            <p> Access COS MATE through Telegram, WhatsApp, and the web so your study companion is
+                                always within reach. </p>
+                        </article>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section id="contact" class="contact">
-            <div class="container">
-                <h2>Get Started Today</h2>
-                <p>Join thousands of students studying smarter with COS MATE</p>
-                <div class="contact-buttons">
-                    <a href="#" class="btn btn-whatsapp">WhatsApp</a>
-                    <a href="#" class="btn btn-telegram">Telegram</a>
+            </section>
+            <!-- ===================================================== HOW IT WORKS ===================================================== -->
+            <section id="how" class="how-it-works" aria-labelledby="how-title">
+                <div class="container">
+                    <h2 id="how-title"> How COS MATE Works </h2>
+                    <div class="steps"> <!-- Step 1 -->
+                        <article class="step">
+                            <div class="step-number" aria-hidden="true"> 1 </div>
+                            <h3> Connect </h3>
+                            <p> Open COS MATE through Telegram, WhatsApp, or the web. </p>
+                        </article> <!-- Step 2 -->
+                        <article class="step">
+                            <div class="step-number" aria-hidden="true"> 2 </div>
+                            <h3> Ask or Upload </h3>
+                            <p> Ask a question, send an image, or upload your study materials. </p>
+                        </article> <!-- Step 3 -->
+                        <article class="step">
+                            <div class="step-number" aria-hidden="true"> 3 </div>
+                            <h3> Understand </h3>
+                            <p> Get explanations, summaries, answers, and useful study insights. </p>
+                        </article> <!-- Step 4 -->
+                        <article class="step">
+                            <div class="step-number" aria-hidden="true"> 4 </div>
+                            <h3> Practice </h3>
+                            <p> Generate CBT questions and practice what you've learned. </p>
+                        </article>
+                    </div>
                 </div>
-            </div>
-        </section>
-
+            </section>
+            <!-- ===================================================== CONTACT / FINAL CTA ===================================================== -->
+            <section id="contact" class="contact" aria-labelledby="contact-title">
+                <div class="container">
+                    <h2 id="contact-title"> Ready to Study Smarter? </h2>
+                    <p> Your study companion is just a message away. Start learning with COS MATE today. </p>
+                    <div class="contact-buttons"> <a href="#" class="btn btn-whatsapp" id="whatsappButton"
+                            aria-label="Start studying with COS MATE on WhatsApp"> Start on WhatsApp </a> <a href="#"
+                            class="btn btn-telegram" id="telegramButton"
+                            aria-label="Start studying with COS MATE on Telegram"> Start on Telegram </a> </div>
+                </div>
+            </section>
+        </main>
+        <!-- ===================================================== FOOTER ===================================================== -->
         <footer class="footer">
             <div class="container">
-                <p>&copy; 2026 COS MATE. All rights reserved.</p>
-                <p>Built for Nigerian university students</p>
+                <p> &copy; 2026 COS MATE. All rights reserved. </p>
+                <p> Built to help Nigerian university students study smarter and learn better. </p>
             </div>
         </footer>
     </div>
-
-    <script src="/js/app.js"></script>
+    <!-- ========================================================= JAVASCRIPT ========================================================= -->
+    <script src="/js/app.js" defer></script>
 </body>
+
 </html>
