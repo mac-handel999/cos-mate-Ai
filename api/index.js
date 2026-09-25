@@ -1,6 +1,9 @@
 import express from "express";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 import telegramRoutes from "../src/services/telegram/telegram.routes.js";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 
 app.use(express.json());
@@ -61,6 +64,14 @@ app.get("/api/telegram/test-send", async (req, res) => {
 });
 
 app.use("/api/telegram", telegramRoutes);
+
+// Serve static files from public directory
+app.use(express.static(join(__dirname, "..", "public")));
+
+// Serve index.html for root path
+app.get("/", (req, res) => {
+    res.sendFile(join(__dirname, "..", "public", "index.html"));
+});
 
 // Start server for local development (Vercel handles this in production)
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
