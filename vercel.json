@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "npm install",
-  "outputDirectory": "public",
   "functions": {
     "api/index.js": {
       "maxDuration": 300
