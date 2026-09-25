@@ -25,6 +25,41 @@ app.get("/api/telegram/test", (req, res) => {
     });
 });
 
+// Diagnostic endpoint: test Telegram API directly
+app.get("/api/telegram/test-send", async (req, res) => {
+    try {
+        const { sendTelegramMessage } =
+            await import("../src/services/telegram/telegram.js");
+
+        const chatId = req.query.chat_id;
+
+        if (!chatId) {
+            return res.status(400).json({
+                ok: false,
+                error: "chat_id is required"
+            });
+        }
+
+        const result = await sendTelegramMessage(
+            chatId,
+            "🚀 COS MATE Telegram API test successful."
+        );
+
+        return res.json({
+            ok: true,
+            telegram: result
+        });
+
+    } catch (error) {
+        console.error("Telegram test failed:", error);
+
+        return res.status(500).json({
+            ok: false,
+            error: error.message
+        });
+    }
+});
+
 app.use("/api/telegram", telegramRoutes);
 
 // Start server for local development (Vercel handles this in production)
