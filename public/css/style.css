@@ -484,6 +484,42 @@ body {
     font-size: 0.9rem;
 }
 
+.footer p {
+    margin: 0.5rem 0;
+}
+
+.footer .credit {
+    margin-top: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.footer .credit strong {
+    color: var(--primary);
+}
+
+.footer .contact-info {
+    margin-top: 0.5rem;
+}
+
+.footer .contact-info a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer .contact-info a:hover {
+    text-decoration: underline;
+}
+
+.footer-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 /* ========================================================= ACCESSIBILITY ========================================================= */
 a:focus-visible,
 button:focus-visible {
