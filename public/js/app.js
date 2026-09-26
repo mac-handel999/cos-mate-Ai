@@ -55,8 +55,16 @@ class COSMateApp {
         // Contact buttons
         document.querySelectorAll('.btn-whatsapp, .btn-telegram').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.preventDefault();
                 const platform = btn.classList.contains('btn-whatsapp') ? 'WhatsApp' : 'Telegram';
+
+                // Telegram has a real public deep-link, so allow the browser
+                // to open the bot after showing the short status message.
+                if (platform === 'Telegram') {
+                    this.showNotification('Opening Telegram...', 'info');
+                    return;
+                }
+
+                e.preventDefault();
                 this.showNotification(`Connecting to ${platform}...`, 'info');
             });
         });
