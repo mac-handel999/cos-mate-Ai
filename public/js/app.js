@@ -65,10 +65,15 @@ class COSMateApp {
     async checkHealth() {
         try {
             const response = await fetch('/api/health');
+
+            if (!response.ok) {
+                throw new Error(`Health check returned HTTP ${response.status}`);
+            }
+
             const data = await response.json();
             console.log('COS MATE Health Check:', data);
             
-            if (data.status === 'online') {
+            if (data.ok) {
                 this.showNotification('COS MATE is online', 'success');
             }
         } catch (error) {
