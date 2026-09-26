@@ -2,11 +2,16 @@ import express from "express";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import telegramRoutes from "../src/services/telegram/telegram.routes.js";
+import whatsappRoutes from "../src/services/whatsapp/whatsapp.routes.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 
-app.use(express.json());
+app.use(express.json({
+    verify: (req, res, buffer) => {
+        req.rawBody = buffer;
+    }
+}));
 
 app.get("/api/health", (req, res) => {
     console.log("Health endpoint hit");
@@ -64,6 +69,7 @@ app.get("/api/telegram/test-send", async (req, res) => {
 });
 
 app.use("/api/telegram", telegramRoutes);
+app.use("/api/whatsapp", whatsappRoutes);
 
 // Serve static files from public directory
 app.use(express.static(join(__dirname, "..", "public")));

@@ -28,6 +28,11 @@ Teaching principles:
 
 The goal is not merely to give students answers.
 The goal is to help them understand what they are learning.
+
+Response format:
+- Use concise Markdown that is easy to read in a chat.
+- Use short headings, bold key terms, and bullet lists when helpful.
+- Do not use tables, raw HTML, or Markdown images.
 `;
 
 export default COS_MATE_SYSTEM_PROMPT;

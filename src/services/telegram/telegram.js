@@ -47,10 +47,14 @@ export async function telegramRequest(method, data = {}) {
     }
 }
 
-export async function sendTelegramMessage(chatId, text) {
+export async function sendTelegramMessage(chatId, text, options = {}) {
     return telegramRequest("sendMessage", {
         chat_id: chatId,
-        text
+        text,
+        ...(options.parseMode ? { parse_mode: options.parseMode } : {}),
+        ...(options.disableWebPagePreview
+            ? { link_preview_options: { is_disabled: true } }
+            : {})
     });
 }
 
