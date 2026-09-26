@@ -13,6 +13,8 @@ for (const key of requiredEnv) {
 }
 
 export const env = {
+  supabaseUrl: process.env.SUPABASE_URL,
+  supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN,
   telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET,
   groqApiKey: process.env.GROQ_API_KEY,

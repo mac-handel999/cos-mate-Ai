@@ -83,6 +83,31 @@ export async function sendDocument(chatId, document, caption = null) {
     return telegramRequest("sendDocument", data);
 }
 
+export async function sendTelegramTextDocument(chatId, text, filename = "cos-mate-cbt-questions.txt") {
+    const form = new FormData();
+    form.append("chat_id", String(chatId));
+    form.append("document", new Blob([text], { type: "text/plain" }), filename);
+
+    try {
+        const response = await axios.post(
+            `https://api.telegram.org/bot${env.telegramBotToken}/sendDocument`,
+            form,
+            { timeout: 30000 }
+        );
+
+        if (!response.data.ok) {
+            throw new Error(`Telegram API error: ${response.data.description || "Unknown error"}`);
+        }
+
+        return response.data.result;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(`Telegram API error: ${error.response.data?.description || error.message}`);
+        }
+        throw error;
+    }
+}
+
 export async function getFile(fileId) {
     return telegramRequest("getFile", {
         file_id: fileId

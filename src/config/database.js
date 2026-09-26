@@ -1,26 +1,23 @@
-import { createClient } from '@supabase/supabase-js';
-import { config } from './env.js';
+import { createClient } from "@supabase/supabase-js";
+import { env } from "./env.js";
 
-// Validate required environment variables
-if (!config.supabase.url || !config.supabase.publishableKey) {
-  console.warn('Supabase configuration missing. Some features may not work.');
+const configured = Boolean(env.supabaseUrl && env.supabaseServiceKey);
+
+if (!configured) {
+    console.warn("Supabase server configuration is missing. Conversation memory is disabled.");
 }
 
-// Create Supabase client
-export const supabase = createClient(
-  config.supabase.url,
-  config.supabase.publishableKey,
-  {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
-  }
-);
+// This client is server-only. The service-role key is required because the
+// schema enables RLS and channel users do not have Supabase Auth sessions.
+export const supabase = configured
+    ? createClient(env.supabaseUrl, env.supabaseServiceKey, {
+        auth: {
+            persistSession: false,
+            autoRefreshToken: false
+        }
+    })
+    : null;
 
-// Helper to check if Supabase is configured
-export const isSupabaseConfigured = () => {
-  return !!(config.supabase.url && config.supabase.publishableKey);
-};
+export const isSupabaseConfigured = () => configured;
 
 export default supabase;
