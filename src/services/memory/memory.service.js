@@ -25,6 +25,7 @@ export async function saveMessage({
             conversation_id: conversationId,
             platform_message_id: platformMessageId,
             sender_type: senderType,
+            role: senderType, // role column required by schema
             message_type: messageType,
             content: text,
             metadata

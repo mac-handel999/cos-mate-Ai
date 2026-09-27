@@ -62,6 +62,19 @@ More features are coming soon. 🚀`
         return;
     }
 
+    // Check if message has photo/image
+    const hasImage = message.photo && message.photo.length > 0;
+    const hasDocument = message.document;
+
+    // If no text and no image/document, show help
+    if (!text && !hasImage && !hasDocument) {
+        await sendTelegramMessage(
+            chatId,
+            "I can currently understand text messages. Image and PDF support is coming next. 📚"
+        );
+        return;
+    }
+
     try {
         // Send typing indicator
         await sendTypingAction(chatId);
@@ -91,8 +104,8 @@ More features are coming soon. 🚀`
                 conversationId: conversation.id,
                 platformMessageId: String(message.message_id),
                 senderType: "user",
-                messageType: "text",
-                text: text || "[Image/PDF message]"
+                messageType: hasImage ? "image" : hasDocument ? "document" : "text",
+                text: text || (hasImage ? "[Image message]" : "[Document message]")
             });
 
             // Step 4: Build AI context from conversation history
@@ -107,10 +120,10 @@ More features are coming soon. 🚀`
         const userMessage = text || "Please analyze this image/document for study purposes.";
 
         // Check if message contains image or document
-        if (message.photo && message.photo.length > 0) {
+        if (hasImage) {
             // Handle image - use vision model
             response = await analyzeImage(userMessage, []);
-        } else if (message.document) {
+        } else if (hasDocument) {
             // Handle document - use main model with text
             response = await askAI({
                 messages: [
