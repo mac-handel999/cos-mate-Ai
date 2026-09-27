@@ -3,7 +3,7 @@ import { askAI } from "../ai/ai.service.js";
 import { COS_MATE_SYSTEM_PROMPT } from "../ai/prompts.js";
 import { findOrCreateUser } from "../users/user.service.js";
 import { getOrCreateConversation } from "../conversations/conversation.service.js";
-import { saveMessage, getRecentMessages } from "../memory/memory.service.js";
+import { saveMessage } from "../memory/memory.service.js";
 import { buildChatContext } from "../ai/context.service.js";
 
 export async function handleTelegramUpdate(update) {
@@ -71,31 +71,41 @@ More features are coming soon. 🚀`
         // Send typing indicator
         await sendTypingAction(chatId);
 
-        // Step 1: Find or create user
-        const user = await findOrCreateUser({
-            platform: "telegram",
-            externalUserId: String(telegramUserId),
-            displayName: telegramFirstName || telegramUsername
-        });
+        // Try to save to Supabase, but don't fail if it's not configured
+        let user = null;
+        let conversation = null;
+        let contextMessages = [];
 
-        // Step 2: Get or create conversation
-        const conversation = await getOrCreateConversation({
-            userId: user.id,
-            platform: "telegram",
-            externalChatId: String(chatId)
-        });
+        try {
+            // Step 1: Find or create user
+            user = await findOrCreateUser({
+                platform: "telegram",
+                externalUserId: String(telegramUserId),
+                displayName: telegramFirstName || telegramUsername
+            });
 
-        // Step 3: Save user message
-        await saveMessage({
-            conversationId: conversation.id,
-            platformMessageId: String(message.message_id),
-            senderType: "user",
-            messageType: "text",
-            text
-        });
+            // Step 2: Get or create conversation
+            conversation = await getOrCreateConversation({
+                userId: user.id,
+                platform: "telegram",
+                externalChatId: String(chatId)
+            });
 
-        // Step 4: Build AI context from conversation history
-        const contextMessages = await buildChatContext(conversation.id, 12);
+            // Step 3: Save user message
+            await saveMessage({
+                conversationId: conversation.id,
+                platformMessageId: String(message.message_id),
+                senderType: "user",
+                messageType: "text",
+                text
+            });
+
+            // Step 4: Build AI context from conversation history
+            contextMessages = await buildChatContext(conversation.id, 12);
+
+        } catch (supabaseError) {
+            console.warn("Supabase unavailable, continuing without memory:", supabaseError.message);
+        }
 
         // Step 5: Get AI response
         const response = await askAI({
@@ -104,7 +114,11 @@ More features are coming soon. 🚀`
                     role: "system",
                     content: COS_MATE_SYSTEM_PROMPT
                 },
-                ...contextMessages
+                ...contextMessages,
+                {
+                    role: "user",
+                    content: text
+                }
             ],
             reasoningEffort: "medium"
         });
@@ -113,19 +127,32 @@ More features are coming soon. 🚀`
             throw new Error("AI returned an empty response.");
         }
 
-        // Step 6: Save AI response
-        await saveMessage({
-            conversationId: conversation.id,
-            senderType: "assistant",
-            messageType: "text",
-            text: response
-        });
+        // Try to save AI response
+        if (conversation) {
+            try {
+                await saveMessage({
+                    conversationId: conversation.id,
+                    senderType: "assistant",
+                    messageType: "text",
+                    text: response
+                });
+            } catch (saveError) {
+                console.warn("Could not save AI response:", saveError.message);
+            }
+        }
 
         // Step 7: Send response to Telegram
         await sendTelegramMessage(chatId, response);
 
     } catch (error) {
         console.error("COS MATE AI error:", error);
+        console.error("Error details:", {
+            message: error.message,
+            stack: error.stack,
+            telegramUserId,
+            chatId,
+            text
+        });
 
         await sendTelegramMessage(
             chatId,
