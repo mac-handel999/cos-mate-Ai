@@ -1,11 +1,20 @@
-import { sendTelegramMessage, sendTypingAction } from "./telegram.js";
-import { askAI } from "../ai/ai.service.js";
-import { analyzeImage } from "../ai/ai.service.js";
+import { sendTelegramMessage, sendTypingAction, getFile, downloadFile } from "./telegram.js";
+import { askAI, analyzeImage } from "../ai/ai.service.js";
 import { COS_MATE_SYSTEM_PROMPT } from "../ai/prompts.js";
 import { findOrCreateUser } from "../users/user.service.js";
 import { getOrCreateConversation } from "../conversations/conversation.service.js";
 import { saveMessage } from "../memory/memory.service.js";
 import { buildChatContext } from "../ai/context.service.js";
+
+/**
+ * Download image from Telegram and convert to base64
+ */
+export async function downloadTelegramImage(message) {
+    const photo = message.photo[message.photo.length - 1]; // Get largest photo
+    const file = await getFile(photo.file_id);
+    const buffer = await downloadFile(file.file_path);
+    return buffer.toString("base64");
+}
 
 export async function handleTelegramUpdate(update) {
     if (!update.message) {
@@ -117,12 +126,19 @@ More features are coming soon. 🚀`
 
         // Step 5: Get AI response
         let response;
-        const userMessage = text || "Please analyze this image/document for study purposes.";
+        const userMessage = text || "Please analyze this image for study purposes.";
 
         // Check if message contains image or document
         if (hasImage) {
-            // Handle image - use vision model
-            response = await analyzeImage(userMessage, []);
+            try {
+                // Download image from Telegram
+                const imageBase64 = await downloadTelegramImage(message);
+                // Send to vision model
+                response = await analyzeImage(userMessage, [imageBase64]);
+            } catch (imageError) {
+                console.error("Image processing error:", imageError);
+                throw new Error("Failed to process image. Please try again.");
+            }
         } else if (hasDocument) {
             // Handle document - use main model with text
             response = await askAI({
