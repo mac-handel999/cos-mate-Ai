@@ -1,7 +1,7 @@
 import express from "express";
 import { env } from "../../config/env.js";
 import { isWhatsAppConfigured } from "./whatsapp.js";
-import { handleWhatsAppWebhook, hasValidWhatsAppSignature } from "./whatsapp.service.js";
+import { handleWhatsAppWebhook } from "./whatsapp.service.js";
 
 const router = express.Router();
 
@@ -24,10 +24,6 @@ router.get("/webhook", (req, res) => {
 router.post("/webhook", async (req, res) => {
     if (!isWhatsAppConfigured()) {
         return res.status(503).json({ error: "WhatsApp is not configured." });
-    }
-
-    if (!hasValidWhatsAppSignature(req.rawBody, req.headers["x-hub-signature-256"])) {
-        return res.sendStatus(401);
     }
 
     try {

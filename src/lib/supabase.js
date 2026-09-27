@@ -3,23 +3,29 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl) {
-    throw new Error("Missing SUPABASE_URL");
+// Don't throw on import - handle gracefully at runtime
+let supabaseClient = null;
+
+if (supabaseUrl && supabaseServiceRoleKey) {
+    supabaseClient = createClient(
+        supabaseUrl,
+        supabaseServiceRoleKey,
+        {
+            auth: {
+                persistSession: false,
+                autoRefreshToken: false,
+            },
+        }
+    );
 }
 
-if (!supabaseServiceRoleKey) {
-    throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
-}
+export const supabase = supabaseClient;
 
-export const supabase = createClient(
-    supabaseUrl,
-    supabaseServiceRoleKey,
-    {
-        auth: {
-            persistSession: false,
-            autoRefreshToken: false,
-        },
+export function getSupabase() {
+    if (!supabaseClient) {
+        throw new Error("Supabase not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.");
     }
-);
+    return supabaseClient;
+}
 
 export default supabase;

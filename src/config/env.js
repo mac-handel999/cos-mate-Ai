@@ -3,9 +3,7 @@ import "dotenv/config";
 const requiredEnv = [
     "TELEGRAM_BOT_TOKEN",
     "TELEGRAM_WEBHOOK_SECRET",
-    "GROQ_API_KEY",
-    "SUPABASE_URL",
-    "SUPABASE_SERVICE_ROLE_KEY"
+    "GROQ_API_KEY"
 ];
 
 for (const key of requiredEnv) {
@@ -20,4 +18,9 @@ export const env = {
     groqApiKey: process.env.GROQ_API_KEY,
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY
+};
+
+// Check if Supabase is configured
+export const isSupabaseConfigured = () => {
+    return !!(env.supabaseUrl && env.supabaseServiceRoleKey);
 };
