@@ -527,6 +527,32 @@ button:focus-visible {
     outline-offset: 4px;
 }
 
+/* Coming Soon badge */
+.coming-soon {
+    font-size: 0.7rem;
+    background: var(--accent);
+    color: var(--primary-deep);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    margin-left: 0.5rem;
+    font-weight: 700;
+}
+
+/* Disabled button */
+.btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Platform notice */
+.platform-notice {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-style: italic;
+}
+
 /* ========================================================= RESPONSIVE ========================================================= */
 @media (max-width: 768px) {
     .container {
