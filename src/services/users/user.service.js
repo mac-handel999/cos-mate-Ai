@@ -14,7 +14,7 @@ export async function findOrCreateUser({
     displayName = null
 }) {
     const column = platform === "telegram"
-        ? "telegram_id"
+        ? "telegram_user_id"
         : platform === "whatsapp"
             ? "whatsapp_user_id"
             : "auth_user_id";
@@ -57,7 +57,7 @@ export async function findOrCreateUser({
     };
 
     if (platform === "telegram") {
-        insertData.telegram_id = externalUserId;
+        insertData.telegram_user_id = externalUserId;
     } else if (platform === "whatsapp") {
         insertData.whatsapp_user_id = externalUserId;
     }

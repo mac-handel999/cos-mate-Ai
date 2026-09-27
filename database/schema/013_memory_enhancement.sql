@@ -141,8 +141,8 @@ CREATE TABLE IF NOT EXISTS public.message_attachments (
 -- 7. INDEXES
 -- ---------------------------------------------------------
 
-CREATE INDEX IF NOT EXISTS idx_users_telegram_id
-    ON public.users(telegram_id);
+CREATE INDEX IF NOT EXISTS idx_users_telegram_user_id
+    ON public.users(telegram_user_id);
 
 CREATE INDEX IF NOT EXISTS idx_users_phone_number
     ON public.users(phone_number);
