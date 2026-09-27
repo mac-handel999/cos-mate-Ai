@@ -22,5 +22,5 @@ export const env = {
 
 // Check if Supabase is configured
 export const isSupabaseConfigured = () => {
-    return !!(env.supabaseUrl && env.supabaseServiceRoleKey);
+    return !!(env.supabaseUrl && env.supabaseServiceKey);
 };
