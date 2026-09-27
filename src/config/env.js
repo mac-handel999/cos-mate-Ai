@@ -17,7 +17,7 @@ export const env = {
     telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET,
     groqApiKey: process.env.GROQ_API_KEY,
     supabaseUrl: process.env.SUPABASE_URL,
-    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY
+    supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY
 };
 
 // Check if Supabase is configured

@@ -1,15 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
 
 // Don't throw on import - handle gracefully at runtime
 let supabaseClient = null;
 
-if (supabaseUrl && supabaseServiceRoleKey) {
+if (supabaseUrl && supabaseServiceKey) {
     supabaseClient = createClient(
         supabaseUrl,
-        supabaseServiceRoleKey,
+        supabaseServiceKey,
         {
             auth: {
                 persistSession: false,
@@ -23,7 +23,7 @@ export const supabase = supabaseClient;
 
 export function getSupabase() {
     if (!supabaseClient) {
-        throw new Error("Supabase not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.");
+        throw new Error("Supabase not configured. Set SUPABASE_URL and SUPABASE_SERVICE_KEY.");
     }
     return supabaseClient;
 }
