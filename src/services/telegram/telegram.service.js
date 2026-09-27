@@ -1,5 +1,6 @@
 import { sendTelegramMessage, sendTypingAction } from "./telegram.js";
 import { askAI } from "../ai/ai.service.js";
+import { analyzeImage } from "../ai/ai.service.js";
 import { COS_MATE_SYSTEM_PROMPT } from "../ai/prompts.js";
 import { findOrCreateUser } from "../users/user.service.js";
 import { getOrCreateConversation } from "../conversations/conversation.service.js";
@@ -18,14 +19,7 @@ export async function handleTelegramUpdate(update) {
     const telegramUsername = message.from?.username;
     const telegramFirstName = message.from?.first_name;
 
-    if (!text) {
-        await sendTelegramMessage(
-            chatId,
-            "I can currently understand text messages. Image and PDF support is coming next. 📚"
-        );
-        return;
-    }
-
+    // Handle /start command
     if (text === "/start") {
         await sendTelegramMessage(
             chatId,
@@ -45,6 +39,7 @@ Send me a question to get started. 📚`
         return;
     }
 
+    // Handle /help command
     if (text === "/help") {
         await sendTelegramMessage(
             chatId,
@@ -97,7 +92,7 @@ More features are coming soon. 🚀`
                 platformMessageId: String(message.message_id),
                 senderType: "user",
                 messageType: "text",
-                text
+                text: text || "[Image/PDF message]"
             });
 
             // Step 4: Build AI context from conversation history
@@ -108,20 +103,46 @@ More features are coming soon. 🚀`
         }
 
         // Step 5: Get AI response
-        const response = await askAI({
-            messages: [
-                {
-                    role: "system",
-                    content: COS_MATE_SYSTEM_PROMPT
-                },
-                ...contextMessages,
-                {
-                    role: "user",
-                    content: text
-                }
-            ],
-            reasoningEffort: "medium"
-        });
+        let response;
+        const userMessage = text || "Please analyze this image/document for study purposes.";
+
+        // Check if message contains image or document
+        if (message.photo && message.photo.length > 0) {
+            // Handle image - use vision model
+            response = await analyzeImage(userMessage, []);
+        } else if (message.document) {
+            // Handle document - use main model with text
+            response = await askAI({
+                messages: [
+                    {
+                        role: "system",
+                        content: COS_MATE_SYSTEM_PROMPT
+                    },
+                    ...contextMessages,
+                    {
+                        role: "user",
+                        content: `${userMessage}\n\n[Document: ${message.document.file_name || "uploaded file"}]`
+                    }
+                ],
+                reasoningEffort: "medium"
+            });
+        } else {
+            // Regular text message
+            response = await askAI({
+                messages: [
+                    {
+                        role: "system",
+                        content: COS_MATE_SYSTEM_PROMPT
+                    },
+                    ...contextMessages,
+                    {
+                        role: "user",
+                        content: userMessage
+                    }
+                ],
+                reasoningEffort: "medium"
+            });
+        }
 
         if (!response) {
             throw new Error("AI returned an empty response.");
@@ -154,11 +175,20 @@ More features are coming soon. 🚀`
             text
         });
 
-        await sendTelegramMessage(
-            chatId,
-            `Sorry, I couldn't process that request right now.
+        // Check if it's a rate limit error
+        const isRateLimit = error.message?.includes("rate limit") ||
+                            error.message?.includes("Rate limit") ||
+                            error.message?.includes("429") ||
+                            error.message?.includes("Too Many Requests");
 
-Please try again in a moment.`
-        );
+        const errorMessage = isRateLimit
+            ? `⚠️ AI service is currently rate limited. This happens when too many requests are made at once.
+
+Please wait a moment and try again. The limit resets automatically.`
+            : `Sorry, I couldn't process that request right now.
+
+Please try again in a moment.`;
+
+        await sendTelegramMessage(chatId, errorMessage);
     }
 }
